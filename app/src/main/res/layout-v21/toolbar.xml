@@ -8,14 +8,15 @@
     android:minHeight="?attr/actionBarSize"
     app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-    android:background="@color/colorPrimary">
+    android:background="@color/colorPrimary"
+    >
 
     <TextView
         android:id="@+id/editSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="My Fire Base App"
+        android:text="Test String"
         android:textColor="#FFFFFF"
         android:padding="8dp" />
 </androidx.appcompat.widget.Toolbar>
