@@ -7,19 +7,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.Objects;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 public class MainActivity extends Activity {
-    int sum = 0;
     boolean isZero = false;
     double resultNumber;
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-
-    public static int applyOp(char op,int b,int a)
+    // Function to Execute Operator
+    public double applyOp(char op,double b,double a)
     {
         switch (op)
         {
@@ -35,7 +34,8 @@ public class MainActivity extends Activity {
         return 0;
     }
 
-    public static boolean hasPrecedence(char op1,char op2)
+    // Check if existing operator and the last one has Precedence or not
+    public boolean hasPrecedence(char op1,char op2)
     {
         if ((op1 == '*' || op1 == '/') && (op2 == '+' || op2 == '-'))
             return false;
@@ -44,29 +44,28 @@ public class MainActivity extends Activity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public int evaluate(String input) {
-        char[] arrChar = input.toCharArray();
-        Stack<Integer> values = new Stack<>();
+    public double evaluate(String input) {
+
+        Stack<Double> values = new Stack<>();
         Stack<Character> ops = new Stack<>();
 
-
-        for (int i = 0;i < arrChar.length;)
+        for (int i = 0;i < input.length();)
         {
             StringBuilder multiDigitsNumber = new StringBuilder();
-            if (arrChar[i] >= '0' && arrChar[i] <= '9')
+            if (input.charAt(i) >= '0' && input.charAt(i) <= '9')
             {
-                while (i< arrChar.length && arrChar[i] >= '0' && arrChar[i] <= '9') {
-                    multiDigitsNumber.append(arrChar[i]);
+                while (i< input.length() && input.charAt(i) >= '0' && input.charAt(i) <= '9') {
+                    multiDigitsNumber.append(input.charAt(i));
                     i++;
                 }
-                values.push(Integer.parseInt(multiDigitsNumber.toString()));
+                values.push(Double.parseDouble(multiDigitsNumber.toString()));
             }
-            else if (arrChar[i] == '+' || arrChar[i] == '-' || arrChar[i] == '*' || arrChar[i] == '/')
+            else
             {
-                while (!ops.empty() && hasPrecedence(arrChar[i],ops.peek())) {
+                while (!ops.empty() && hasPrecedence(input.charAt(i),ops.peek())) {
                     values.push(applyOp(ops.pop(),values.pop(),values.pop()));
                 }
-                ops.push(arrChar[i]);
+                ops.push(input.charAt(i));
                 i++;
             }
         }
@@ -174,6 +173,7 @@ public class MainActivity extends Activity {
         multiple.setOnClickListener(calculatorListener);
         division.setOnClickListener(calculatorListener);
 
+
         // AC button function
         AC.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -181,16 +181,19 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 result.setText("0");
                 isZero = true;
-                sum = 0;
             }
         });
 
+        // Equal Button Click
         equal.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
                 resultNumber = evaluate(result.getText().toString());
-                result.setText(resultNumber + "");
+                DecimalFormat df = new DecimalFormat("0.###");
+                result.setText(df.format(resultNumber));
+
+
             }
         });
 
