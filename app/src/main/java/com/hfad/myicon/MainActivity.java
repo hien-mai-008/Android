@@ -37,41 +37,48 @@ public class MainActivity extends Activity {
     // Check if existing operator and the last one has Precedence or not
     public boolean hasPrecedence(char op1,char op2)
     {
-        if ((op1 == '*' || op1 == '/') && (op2 == '+' || op2 == '-'))
-            return false;
-        else
-            return true;
+        return (op1 != '*' && op1 != '/') || (op2 != '+' && op2 != '-');
     }
-
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    // Function to calculate math from input
     public double evaluate(String input) {
-
         Stack<Double> values = new Stack<>();
         Stack<Character> ops = new Stack<>();
+        int stringIndex = 0;
 
-        for (int i = 0;i < input.length();)
+        while (stringIndex < input.length())
         {
             StringBuilder multiDigitsNumber = new StringBuilder();
-            if (input.charAt(i) >= '0' && input.charAt(i) <= '9')
+
+            // If the input is number put to stack values
+            if (input.charAt(stringIndex) >= '0' && input.charAt(stringIndex) <= '9')
             {
-                while (i< input.length() && input.charAt(i) >= '0' && input.charAt(i) <= '9') {
-                    multiDigitsNumber.append(input.charAt(i));
-                    i++;
+                while (stringIndex< input.length() && input.charAt(stringIndex) >= '0' && input.charAt(stringIndex) <= '9')
+                {
+                    multiDigitsNumber.append(input.charAt(stringIndex));
+                    stringIndex++;
                 }
                 values.push(Double.parseDouble(multiDigitsNumber.toString()));
             }
+
+            // If the input is operator put to stack ops
             else
             {
-                while (!ops.empty() && hasPrecedence(input.charAt(i),ops.peek())) {
+                while (!ops.empty() && hasPrecedence(input.charAt(stringIndex),ops.peek()))
+                {
                     values.push(applyOp(ops.pop(),values.pop(),values.pop()));
                 }
-                ops.push(input.charAt(i));
-                i++;
+                ops.push(input.charAt(stringIndex));
+                stringIndex++;
             }
         }
+
+        // Execute remain operator in stack
         while (!ops.empty()) {
             values.push(applyOp(ops.pop(), values.pop(), values.pop()));
         }
+
+        // The final number in stack value is result
         return values.pop();
     }
 
@@ -173,7 +180,6 @@ public class MainActivity extends Activity {
         multiple.setOnClickListener(calculatorListener);
         division.setOnClickListener(calculatorListener);
 
-
         // AC button function
         AC.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -192,8 +198,6 @@ public class MainActivity extends Activity {
                 resultNumber = evaluate(result.getText().toString());
                 DecimalFormat df = new DecimalFormat("0.###");
                 result.setText(df.format(resultNumber));
-
-
             }
         });
 
