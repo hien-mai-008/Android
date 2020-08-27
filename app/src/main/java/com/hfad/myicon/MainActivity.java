@@ -53,10 +53,9 @@ public class MainActivity extends Activity {
             // If the input is number put to stack values
             if (input.charAt(stringIndex) >= '0' && input.charAt(stringIndex) <= '9')
             {
-                while (stringIndex< input.length() && input.charAt(stringIndex) >= '0' && input.charAt(stringIndex) <= '9')
+                while (stringIndex < input.length() && input.charAt(stringIndex) >= '0' && input.charAt(stringIndex) <= '9')
                 {
-                    multiDigitsNumber.append(input.charAt(stringIndex));
-                    stringIndex++;
+                    multiDigitsNumber.append(input.charAt(stringIndex++));
                 }
                 values.push(Double.parseDouble(multiDigitsNumber.toString()));
             }
@@ -68,8 +67,7 @@ public class MainActivity extends Activity {
                 {
                     values.push(applyOp(ops.pop(),values.pop(),values.pop()));
                 }
-                ops.push(input.charAt(stringIndex));
-                stringIndex++;
+                ops.push(input.charAt(stringIndex++));
             }
         }
 
