@@ -3,6 +3,7 @@ import androidx.annotation.RequiresApi;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import java.text.DecimalFormat;
 import java.util.Objects;
 import java.util.Stack;
+import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,6 +41,8 @@ public class MainActivity extends Activity {
     {
         return (op1 != '*' && op1 != '/') || (op2 != '+' && op2 != '-');
     }
+
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     // Function to calculate math from input
     public double evaluate(String input) {
@@ -46,21 +50,24 @@ public class MainActivity extends Activity {
         Stack<Character> ops = new Stack<>();
         int stringIndex = 0;
 
+//        String[] split = input.split("(?<=\\\\d)(?=\\\\D)|(?<=\\\\D)(?=\\\\d)");
         while (stringIndex < input.length())
         {
-            StringBuilder multiDigitsNumber = new StringBuilder();
-
-            // If the input is number put to stack values
+//            StringBuilder multiDigitsNumber = new StringBuilder();
+//             If the input is number put to stack values
             if (input.charAt(stringIndex) >= '0' && input.charAt(stringIndex) <= '9')
             {
-                while (stringIndex < input.length() && input.charAt(stringIndex) >= '0' && input.charAt(stringIndex) <= '9')
-                {
-                    multiDigitsNumber.append(input.charAt(stringIndex++));
-                }
-                values.push(Double.parseDouble(multiDigitsNumber.toString()));
+                String number = input.substring(stringIndex).replaceAll("^(\\d+).*","$1");
+                values.push(Double.parseDouble(number));
+                stringIndex += number.length();
+//                while (stringIndex < input.length() && input.charAt(stringIndex) >= '0' && input.charAt(stringIndex) <= '9')
+//                {
+//                    multiDigitsNumber.append(input.charAt(stringIndex++));
+//                }
+//                values.push(Double.parseDouble(multiDigitsNumber.toString()));
             }
 
-            // If the input is operator put to stack ops
+//             If the input is operator put to stack ops
             else
             {
                 while (!ops.empty() && hasPrecedence(input.charAt(stringIndex),ops.peek()))
@@ -70,7 +77,6 @@ public class MainActivity extends Activity {
                 ops.push(input.charAt(stringIndex++));
             }
         }
-
         // Execute remain operator in stack
         while (!ops.empty()) {
             values.push(applyOp(ops.pop(), values.pop(), values.pop()));
