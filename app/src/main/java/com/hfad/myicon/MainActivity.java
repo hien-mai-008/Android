@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 public class MainActivity<i> extends Activity {
     boolean isZero = false;
     double resultNumber;
+
     HashMap<Integer,String> idButton = new HashMap<Integer,String>();
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 
@@ -62,13 +63,13 @@ public class MainActivity<i> extends Activity {
         {
             char currentChar = input.charAt(i);
 
-//             If the input is number put to stack values
+            // If the input is number put to stack values
             if (currentChar >= '0' && currentChar <= '9')
             {
-                currentNumber = currentNumber * 10 + Double.parseDouble(String.valueOf(currentChar));
+                currentNumber = currentNumber * 10 + (currentChar - '0');
             }
 
-//             If the input is operator put to stack ops
+            // If the input is operator put to stack ops
             else
             {
                 values.push(currentNumber);
@@ -136,7 +137,6 @@ public class MainActivity<i> extends Activity {
         final Button AC = findViewById(R.id.AC);
 
 
-
         final View.OnClickListener calculatorListener = new View.OnClickListener() {
 
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -149,53 +149,9 @@ public class MainActivity<i> extends Activity {
                     result.setText("");
                     isZero = false;
                 }
-                // Display on TextView when click button
 
+                // Display on TextView when click button
                 result.append(idButton.get(id));
-//                switch(id) {
-//                    case R.id.number0:
-//                        result.append("0");
-//                        break;
-//                    case R.id.number1:
-//                        result.append("1");
-//                        break;
-//                    case R.id.number2:
-//                        result.append("2");
-//                        break;
-//                    case R.id.number3:
-//                        result.append("3");
-//                        break;
-//                    case R.id.number4:
-//                        result.append("4");
-//                        break;
-//                    case R.id.number5:
-//                        result.append("5");
-//                        break;
-//                    case R.id.number6:
-//                        result.append("6");
-//                        break;
-//                    case R.id.number7:
-//                        result.append("7");
-//                        break;
-//                    case R.id.number8:
-//                        result.append("8");
-//                        break;
-//                    case R.id.number9:
-//                        result.append("9");
-//                        break;
-//                    case R.id.add:
-//                        result.append("+");
-//                        break;
-//                    case R.id.subtract:
-//                        result.append("-");
-//                        break;
-//                    case R.id.multiple:
-//                        result.append("*");
-//                        break;
-//                    case R.id.division:
-//                        result.append("/");
-//                        break;
-//                }
             }
         };
         number0.setOnClickListener(calculatorListener);
