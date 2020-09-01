@@ -3,36 +3,22 @@ import androidx.annotation.RequiresApi;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 import java.util.Stack;
-import java.util.StringTokenizer;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class MainActivity<i> extends Activity {
     boolean isZero = false;
     double resultNumber;
-
-    HashMap<Integer,String> idButton = new HashMap<Integer,String>();
+    final static HashMap<Integer,String> idButtonMap = new HashMap<Integer,String>();
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 
     // Function to Execute Operator
-    public double applyOp(char op,double b,double a)
-    {
-        switch (op)
-        {
+    public double applyOp(char op,double b,double a) {
+        switch (op) {
             case '+':
                 return a + b;
             case '-':
@@ -46,72 +32,65 @@ public class MainActivity<i> extends Activity {
     }
 
     // Check if existing operator and the last one has Precedence or not
-    public boolean hasPrecedence(char op1,char op2)
-    {
+    public boolean hasPrecedence(char op1,char op2) {
         return (op1 == '+' || op1 == '-') && (op2 == '*' || op2 == '/');
     }
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     // Function to calculate math from input
-    public double evaluate(String input)
-    {
-        Stack<Double> values = new Stack<>();
-        Stack<Character> ops = new Stack<>();
+    public double evaluateMath(String input) {
+        Stack<Double> valueStack = new Stack<>();
+        Stack<Character> operationStack = new Stack<>();
         double currentNumber = 0;
 
-        for (int i = 0; i < input.length();i++)
-        {
+        for (int i = 0; i < input.length();i++) {
             char currentChar = input.charAt(i);
 
-            // If the input is number put to stack values
-            if (currentChar >= '0' && currentChar <= '9')
-            {
+            // If the input is number put to stack valueStack
+            if (currentChar >= '0' && currentChar <= '9') {
                 currentNumber = currentNumber * 10 + (currentChar - '0');
             }
 
             // If the input is operator put to stack ops
-            else
-            {
-                values.push(currentNumber);
+            else {
+                valueStack.push(currentNumber);
                 currentNumber = 0;
-                while (!ops.empty() && hasPrecedence(currentChar,ops.peek()))
-                {
-                    values.push(applyOp(ops.pop(),values.pop(),values.pop()));
+                while (!operationStack.empty() && hasPrecedence(currentChar,operationStack.peek())) {
+                    valueStack.push(applyOp(operationStack.pop(),valueStack.pop(),valueStack.pop()));
                 }
-                ops.push(currentChar);
+                operationStack.push(currentChar);
             }
         }
-        values.push(currentNumber);
+        valueStack.push(currentNumber);
 
         // Execute remain operator in stack
-        while (!ops.empty()) {
-            values.push(applyOp(ops.pop(), values.pop(), values.pop()));
+        while (!operationStack.empty()) {
+            valueStack.push(applyOp(operationStack.pop(), valueStack.pop(), valueStack.pop()));
         }
 
         // The final number in stack value is result
-        return values.pop();
+        return valueStack.pop();
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.caculator);
 
-        idButton.put(R.id.number0,"0");
-        idButton.put(R.id.number1,"1");
-        idButton.put(R.id.number2,"2");
-        idButton.put(R.id.number3,"3");
-        idButton.put(R.id.number4,"4");
-        idButton.put(R.id.number5,"5");
-        idButton.put(R.id.number6,"6");
-        idButton.put(R.id.number7,"7");
-        idButton.put(R.id.number8,"8");
-        idButton.put(R.id.number9,"9");
-        idButton.put(R.id.add,"+");
-        idButton.put(R.id.subtract,"-");
-        idButton.put(R.id.multiple,"*");
-        idButton.put(R.id.division,"/");
+        idButtonMap.put(R.id.number0,"0");
+        idButtonMap.put(R.id.number1,"1");
+        idButtonMap.put(R.id.number2,"2");
+        idButtonMap.put(R.id.number3,"3");
+        idButtonMap.put(R.id.number4,"4");
+        idButtonMap.put(R.id.number5,"5");
+        idButtonMap.put(R.id.number6,"6");
+        idButtonMap.put(R.id.number7,"7");
+        idButtonMap.put(R.id.number8,"8");
+        idButtonMap.put(R.id.number9,"9");
+        idButtonMap.put(R.id.add,"+");
+        idButtonMap.put(R.id.subtract,"-");
+        idButtonMap.put(R.id.multiple,"*");
+        idButtonMap.put(R.id.division,"/");
 
         // Get Calculate Result
         final TextView result = findViewById(R.id.calculatorScreen);
@@ -136,9 +115,7 @@ public class MainActivity<i> extends Activity {
         final Button multiple = findViewById(R.id.multiple);
         final Button AC = findViewById(R.id.AC);
 
-
         final View.OnClickListener calculatorListener = new View.OnClickListener() {
-
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
@@ -151,7 +128,7 @@ public class MainActivity<i> extends Activity {
                 }
 
                 // Display on TextView when click button
-                result.append(idButton.get(id));
+                result.append(idButtonMap.get(id));
             }
         };
         number0.setOnClickListener(calculatorListener);
@@ -184,12 +161,11 @@ public class MainActivity<i> extends Activity {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
-                resultNumber = evaluate(result.getText().toString());
+                resultNumber = evaluateMath(result.getText().toString());
                 DecimalFormat df = new DecimalFormat("0.###");
                 result.setText(df.format(resultNumber));
             }
         });
-
     }
 }
 
