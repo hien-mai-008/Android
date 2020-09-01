@@ -97,43 +97,43 @@ public class MainActivity<i> extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.caculator);
 
-        idButton.put(1000112,"0");
-        idButton.put(1000119,"1");
-        idButton.put(1000121,"2");
-        idButton.put(1000116,"3");
-        idButton.put(1000118,"4");
-        idButton.put(1000125,"5");
-        idButton.put(1000127,"6");
-        idButton.put(1000122,"7");
-        idButton.put(1000124,"8");
-        idButton.put(1000131,"9");
-        idButton.put(1000000,"+");
-        idButton.put(1000014,"-");
-        idButton.put(1000146,"*");
-        idButton.put(1000169,"/");
+        idButton.put(R.id.number0,"0");
+        idButton.put(R.id.number1,"1");
+        idButton.put(R.id.number2,"2");
+        idButton.put(R.id.number3,"3");
+        idButton.put(R.id.number4,"4");
+        idButton.put(R.id.number5,"5");
+        idButton.put(R.id.number6,"6");
+        idButton.put(R.id.number7,"7");
+        idButton.put(R.id.number8,"8");
+        idButton.put(R.id.number9,"9");
+        idButton.put(R.id.add,"+");
+        idButton.put(R.id.subtract,"-");
+        idButton.put(R.id.multiple,"*");
+        idButton.put(R.id.division,"/");
 
         // Get Calculate Result
         final TextView result = findViewById(R.id.calculatorScreen);
 
         // Get Number Button
-        Button number0 = findViewById(R.id.number0);
-        Button number1 = findViewById(R.id.number1);
-        Button number2 = findViewById(R.id.number2);
-        Button number3 = findViewById(R.id.number3);
-        Button number4 = findViewById(R.id.number4);
-        Button number5 = findViewById(R.id.number5);
-        Button number6 = findViewById(R.id.number6);
-        Button number7 = findViewById(R.id.number7);
-        Button number8 = findViewById(R.id.number8);
-        Button number9 = findViewById(R.id.number9);
+        final Button number0 = findViewById(R.id.number0);
+        final Button number1 = findViewById(R.id.number1);
+        final Button number2 = findViewById(R.id.number2);
+        final Button number3 = findViewById(R.id.number3);
+        final Button number4 = findViewById(R.id.number4);
+        final Button number5 = findViewById(R.id.number5);
+        final Button number6 = findViewById(R.id.number6);
+        final Button number7 = findViewById(R.id.number7);
+        final Button number8 = findViewById(R.id.number8);
+        final Button number9 = findViewById(R.id.number9);
 
         // Get Function Button
-        Button equal = findViewById(R.id.equal);
-        Button add = findViewById(R.id.add);
-        Button subtract = findViewById(R.id.subtract);
-        Button division = findViewById(R.id.division);
-        Button multiple = findViewById(R.id.multiple);
-        Button AC = findViewById(R.id.AC);
+        final Button equal = findViewById(R.id.equal);
+        final Button add = findViewById(R.id.add);
+        final Button subtract = findViewById(R.id.subtract);
+        final Button division = findViewById(R.id.division);
+        final Button multiple = findViewById(R.id.multiple);
+        final Button AC = findViewById(R.id.AC);
 
 
 
@@ -150,6 +150,7 @@ public class MainActivity<i> extends Activity {
                     isZero = false;
                 }
                 // Display on TextView when click button
+
                 result.append(idButton.get(id));
 //                switch(id) {
 //                    case R.id.number0:
