@@ -19,7 +19,7 @@ public class MainActivity<i> extends Activity {
   double resultNumber;
 
   // Function to Execute Operator
-  public double applyOp(char op, double divisor  , double dividend ) {
+  public double applyOp(char op, double divisor, double dividend) {
     switch (op) {
       case '+':
         return dividend + divisor;
