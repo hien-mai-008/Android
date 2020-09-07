@@ -19,7 +19,7 @@ public class MainActivity<i> extends Activity {
   double resultNumber;
 
   // Function to Execute Operator
-  public double applyOp(char op, double b, double a) {
+  public double applyOp(char op, double a, double b) {
     switch (op) {
       case '+':
         return a + b;
@@ -46,14 +46,9 @@ public class MainActivity<i> extends Activity {
 
     for (int i = 0; i < input.length(); i++) {
       char currentChar = input.charAt(i);
-
-      // If the input is number put to stack valueStack
       if (currentChar >= '0' && currentChar <= '9') {
         currentNumber = currentNumber * 10 + (currentChar - '0');
-      }
-
-      // If the input is operator put to stack ops
-      else {
+      } else {
         valueStack.push(currentNumber);
         currentNumber = 0;
         while (!operationStack.empty() && hasPrecedence(currentChar, operationStack.peek())) {
@@ -115,22 +110,21 @@ public class MainActivity<i> extends Activity {
     final Button multiple = findViewById(R.id.multiple);
     final Button AC = findViewById(R.id.AC);
 
-    final View.OnClickListener calculatorListener =
-        new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-            int id = v.getId();
+    final View.OnClickListener calculatorListener = new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        int id = v.getId();
 
-            // Check if the number is delete or not
-            if (isZero) {
-              result.setText("");
-              isZero = false;
-            }
+        // Check if the number is delete or not
+        if (isZero) {
+          result.setText("");
+          isZero = false;
+        }
 
-            // Display on TextView when click button
-            result.append(idButtonMap.get(id));
-          }
-        };
+        // Display on TextView when click button
+        result.append(idButtonMap.get(id));
+      }
+    };
     number0.setOnClickListener(calculatorListener);
     number1.setOnClickListener(calculatorListener);
     number2.setOnClickListener(calculatorListener);
@@ -147,25 +141,23 @@ public class MainActivity<i> extends Activity {
     division.setOnClickListener(calculatorListener);
 
     // AC button function
-    AC.setOnClickListener(
-        new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-            result.setText("0");
-            isZero = true;
-          }
-        });
+    AC.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        result.setText("0");
+        isZero = true;
+      }
+    });
 
     // Equal Button Click
-    equal.setOnClickListener(
-        new View.OnClickListener() {
-          @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-          @Override
-          public void onClick(View v) {
-            resultNumber = evaluateMath(result.getText().toString());
-            DecimalFormat df = new DecimalFormat("0.###");
-            result.setText(df.format(resultNumber));
-          }
-        });
+    equal.setOnClickListener(new View.OnClickListener() {
+      @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+      @Override
+      public void onClick(View v) {
+        resultNumber = evaluateMath(result.getText().toString());
+        DecimalFormat df = new DecimalFormat("0.###");
+        result.setText(df.format(resultNumber));
+      }
+    });
   }
 }
