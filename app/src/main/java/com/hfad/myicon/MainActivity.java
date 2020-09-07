@@ -20,10 +20,6 @@ public class MainActivity<i> extends Activity {
 
   // Function to Execute Operator
   public double applyOp(char op, double operand1, double operand2) {
-    double tempNumber;
-    tempNumber = operand1;
-    operand1 = operand2;
-    operand2 = tempNumber;
     switch (op) {
       case '+':
         return operand1 + operand2;
@@ -56,7 +52,8 @@ public class MainActivity<i> extends Activity {
         valueStack.push(currentNumber);
         currentNumber = 0;
         while (!operationStack.empty() && hasPrecedence(currentChar, operationStack.peek())) {
-          valueStack.push(applyOp(operationStack.pop(), valueStack.pop(), valueStack.pop()));
+//          valueStack.push(applyOp(operationStack.pop(), valueStack.pop(), valueStack.pop()));
+          valueStack.push(applyOp(operationStack.pop(), valueStack.get(i-2), valueStack.get(i)));
         }
         operationStack.push(currentChar);
       }
