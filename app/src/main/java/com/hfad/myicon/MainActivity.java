@@ -43,6 +43,9 @@ public class MainActivity<i> extends Activity {
     Stack<Double> valueStack = new Stack<>();
     Stack<Character> operationStack = new Stack<>();
     double currentNumber = 0;
+    Character operator;
+    Double operand1;
+    Double operand2;
 
     for (int i = 0; i < input.length(); i++) {
       char currentChar = input.charAt(i);
@@ -52,8 +55,10 @@ public class MainActivity<i> extends Activity {
         valueStack.push(currentNumber);
         currentNumber = 0;
         while (!operationStack.empty() && hasPrecedence(currentChar, operationStack.peek())) {
-//          valueStack.push(applyOp(operationStack.pop(), valueStack.pop(), valueStack.pop()));
-          valueStack.push(applyOp(operationStack.pop(), valueStack.get(i-2), valueStack.get(i)));
+          operator = operationStack.pop();
+          operand2 = valueStack.pop();
+          operand1 = valueStack.pop();
+          valueStack.push(applyOp(operator, operand1, operand2));
         }
         operationStack.push(currentChar);
       }
@@ -62,7 +67,10 @@ public class MainActivity<i> extends Activity {
 
     // Execute remain operator in stack
     while (!operationStack.empty()) {
-      valueStack.push(applyOp(operationStack.pop(), valueStack.pop(), valueStack.pop()));
+      operator = operationStack.pop();
+      operand2 = valueStack.pop();
+      operand1 = valueStack.pop();
+      valueStack.push(applyOp(operator, operand1, operand2));
     }
 
     // The final number in stack value is result
@@ -111,7 +119,31 @@ public class MainActivity<i> extends Activity {
     final Button multiple = findViewById(R.id.multiple);
     final Button AC = findViewById(R.id.AC);
 
-    final View.OnClickListener calculatorListener = new View.OnClickListener() {
+    number0.setOnClickListener(this->handlingButtonClickEvent());
+    number1.setOnClickListener(this->handlingButtonClickEvent());
+    number2.setOnClickListener(this->handlingButtonClickEvent());
+    number3.setOnClickListener(this->handlingButtonClickEvent());
+    number4.setOnClickListener(this->handlingButtonClickEvent());
+    number5.setOnClickListener(this->handlingButtonClickEvent());
+    number6.setOnClickListener(this->handlingButtonClickEvent());
+    number7.setOnClickListener(this->handlingButtonClickEvent());
+    number8.setOnClickListener(this->handlingNumberClickEvent());
+    number9.setOnClickListener(this->handlingButtonClickEvent());
+    add.setOnClickListener(this->handlingButtonClickEvent());
+    subtract.setOnClickListener(this->handlingButtonClickEvent());
+    multiple.setOnClickListener(this->handlingButtonClickEvent());
+    division.setOnClickListener(this->handlingButtonClickEvent());
+
+    // AC button function
+    AC.setOnClickListener(this->handlingACButtonClickEvent());
+
+    // Equal Button Click
+    equal.setOnClickListener(this->handlingEqualButtonClickEvent());
+  }
+  
+  // TODO : add type of return value
+  final private handlingButtonClickEvent() {
+    return new View.OnClickListener() {
       @Override
       public void onClick(View v) {
         int id = v.getId();
@@ -126,32 +158,22 @@ public class MainActivity<i> extends Activity {
         result.append(idButtonMap.get(id));
       }
     };
-    number0.setOnClickListener(calculatorListener);
-    number1.setOnClickListener(calculatorListener);
-    number2.setOnClickListener(calculatorListener);
-    number3.setOnClickListener(calculatorListener);
-    number4.setOnClickListener(calculatorListener);
-    number5.setOnClickListener(calculatorListener);
-    number6.setOnClickListener(calculatorListener);
-    number7.setOnClickListener(calculatorListener);
-    number8.setOnClickListener(calculatorListener);
-    number9.setOnClickListener(calculatorListener);
-    add.setOnClickListener(calculatorListener);
-    subtract.setOnClickListener(calculatorListener);
-    multiple.setOnClickListener(calculatorListener);
-    division.setOnClickListener(calculatorListener);
-
-    // AC button function
-    AC.setOnClickListener(new View.OnClickListener() {
+  }
+  
+  // TODO : add type of return value
+  final private handlingACButtonClickEvent() {
+    return new View.OnClickListener() {
       @Override
       public void onClick(View v) {
         result.setText("0");
         isZero = true;
       }
-    });
-
-    // Equal Button Click
-    equal.setOnClickListener(new View.OnClickListener() {
+    };
+  }
+  
+  // TODO : add type of return value
+  final private handlingEqualButtonClickEvent() {
+    return new View.OnClickListener() {
       @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
       @Override
       public void onClick(View v) {
@@ -159,6 +181,6 @@ public class MainActivity<i> extends Activity {
         DecimalFormat df = new DecimalFormat("0.###");
         result.setText(df.format(resultNumber));
       }
-    });
+    };
   }
 }
